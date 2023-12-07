@@ -3,6 +3,8 @@
 	namespace YetAnother\Laravel\Console;
 	
 	use Illuminate\Console\Scheduling\Schedule;
+	use Illuminate\Support\Collection;
+	use InvalidArgumentException;
 	
 	/**
 	 * Represents the scheduler of multiple ScheduledTask classes.
@@ -14,15 +16,22 @@
 		
 		/**
 		 * Adds one or more tasks to be scheduled.
-		 * @param ScheduledTask|ScheduledTask[] $tasks The task instance to schedule, or an array of instances to schedule.
+		 * @param string|string[]|ScheduledTask|ScheduledTask[]|Collection $tasks A single, array or collection of
+		 * ScheduledTask instances, ScheduledTask class names to instantiate to be scheduled.
 		 */
-		function add(ScheduledTask|array $tasks): static
+		function add(string|ScheduledTask|array|Collection $tasks): static
 		{
+			if (is_string($tasks))
+				$tasks = new $tasks();
+			
 			if ($tasks instanceof ScheduledTask)
 			{
 				$this->tasks[] = $tasks;
 				return $this;
 			}
+			
+			if (!is_array($tasks) && !($tasks instanceof Collection))
+				throw new InvalidArgumentException("\$tasks parameter must be a string (ScheduledTask class name), ScheduledTask instance, array or Collection of either.");
 			
 			foreach($tasks as $task)
 			{

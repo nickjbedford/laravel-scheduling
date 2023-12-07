@@ -8,12 +8,16 @@
 	use YetAnother\Laravel\Console\TaskScheduler;
 	use YetAnother\Tests\TestKernel;
 	use YetAnother\Tests\TestMidnightTask;
+	use YetAnother\Tests\TestScheduledAssertingTask;
 	use YetAnother\Tests\TestScheduledTask;
 	
 	class ScheduledTaskTestCase extends TestCase
 	{
 		protected function setUp(): void
 		{
+			TestScheduledAssertingTask::$testCase = $this;
+			TestScheduledAssertingTask::$ran = false;
+			
 			parent::setUp();
 			$this->app->singleton(Kernel::class, TestKernel::class);
 		}
@@ -35,6 +39,18 @@
 			TestKernel::$taskScheduler = $scheduler;
 			
 			Artisan::call('schedule:run');
+		}
+		
+		function testScheduledTaskIsScheduledUsingClassName()
+		{
+			$scheduler = new TaskScheduler();
+			$scheduler->add(TestScheduledAssertingTask::class);
+			
+			TestKernel::$taskScheduler = $scheduler;
+			
+			Artisan::call('schedule:run');
+			
+			$this->assertTrue(TestScheduledAssertingTask::$ran);
 		}
 		
 		function testScheduledTaskIsNotScheduledAtOtherTimesThanMidnight()
