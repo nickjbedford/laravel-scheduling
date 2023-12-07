@@ -1,0 +1,39 @@
+{
+	"name": "nickjbedford/laravel-scheduling",
+	"description": "The Laravel Scheduling framework provides an easier way to implement Schedule-based tasks that are isolated into a class.",
+	"minimum-stability": "stable",
+	"type": "library",
+    "keywords": [
+		"laravel", "scheduling", "cron"
+	],
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Nick Bedford",
+			"email": "email@nickbedford.com"
+		}
+	],
+	"require": {
+		"php": "^8.2",
+		"laravel/framework": ">=10"
+	},
+	"require-dev": {
+        "phpunit/phpunit": "10.*",
+		"orchestra/testbench": "*"
+	},
+    "autoload": {
+        "psr-4": {
+            "YetAnother\\Laravel\\": "src/"
+        }
+    },
+	"autoload-dev": {
+		"psr-4": {
+			"YetAnother\\Tests\\": "tests/"
+		},
+		"files": [
+			"tests/TestKernel.php",
+			"tests/TestScheduledTask.php",
+			"tests/TestMidnightTask.php"
+		]
+	}
+}
