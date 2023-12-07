@@ -73,4 +73,14 @@
 			else
 				$this->assertSame("MIDNIGHT", $value);
 		}
+		
+		function testScheduledTaskIsScheduledUsingStaticMethod()
+		{
+			$this->assertFalse(TestScheduledAssertingTask::$ran);
+			TestKernel::$autoSchedule = TestScheduledAssertingTask::class;
+			
+			Artisan::call('schedule:run');
+			
+			$this->assertTrue(TestScheduledAssertingTask::$ran);
+		}
 	}

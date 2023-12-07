@@ -15,6 +15,21 @@
 		private array $tasks = [];
 		
 		/**
+		 * Schedules one or more tasks with the Laravel schedule and returns
+		 * the new TaskScheduler instance containing these tasks.
+		 * @param Schedule $schedule
+		 * @param string|ScheduledTask|array|Collection $tasks
+		 * @return static
+		 */
+		static function scheduleTasks(Schedule $schedule, string|ScheduledTask|array|Collection $tasks): static
+		{
+			$scheduler = new TaskScheduler();
+			$scheduler->add($tasks);
+			$scheduler->scheduleAll($schedule);
+			return $scheduler;
+		}
+		
+		/**
 		 * Adds one or more tasks to be scheduled.
 		 * @param string|string[]|ScheduledTask|ScheduledTask[]|Collection $tasks A single, array or collection of
 		 * ScheduledTask instances, ScheduledTask class names to instantiate to be scheduled.
