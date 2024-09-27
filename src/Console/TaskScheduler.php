@@ -94,11 +94,25 @@
 				{
 					$task->schedule($schedule, function () use ($task)
 					{
+						$this->beforeTaskExecution();
 						$task->beforeExecution();
 						$task->execute();
 						$task->afterExecution();
+						$this->afterTaskExecution();
 					});
 				}
 			}
 		}
+		
+		/**
+		 * This is called before the tasks have been scheduled. This may be overridden to provide additional
+		 * pre-scheduling functionality outside each individual task.
+		 */
+		protected function beforeTaskExecution(): void { }
+		
+		/**
+		 * This is called after the tasks have been scheduled. This may be overridden to provide additional
+		 * post-scheduling functionality outside each individual task.
+		 */
+		protected function afterTaskExecution(): void { }
 	}
